@@ -1,0 +1,36 @@
+The Basics
+    
+    python.org - lots of info here, documentation, community, etc.
+    
+    choco install python --- for windows
+    brew install python3 --- for mac
+    
+    Working with python
+        
+        1. python executable
+            used for executing python file or rudimentary REPL
+        2. pip (pip installs packages)
+            package manager for installing 3rd party libraries
+        3. ipython
+            robust interactive shell
+
+Learning and Documentation
+
+    python.org/about/gettingstarted
+    docs.python.org                                                     # has tutorials and lots of other information - installing and distributing modules, etc
+        includes release notes, which contains all PEPs - any enhancement for python that was proposed 
+
+Working with the Code of Others
+
+    pypi index - this is where people publish their python code to - can use pip to install this code
+    
+    pip - installs, uninstalls packages, also manages dependencies and package groups (so we dont need to worry about individual packages) as well as version control
+    
+    How to use pip:
+    
+    pip install <package name>                                          # very simplistic
+    
+    Other resources:
+    
+    pypi.python.org
+    
