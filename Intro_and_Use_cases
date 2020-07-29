@@ -1,0 +1,89 @@
+The Zen of python (pro tips/concepts for programming) - https://www.python.org/dev/peps/pep-0020/
+
+  Note that Maintenance is Expensive - Make it readable and comment often
+  
+  No obvious bugs vs No obvious bugs    # KISS principle is key here
+  
+Python Enhancement Proposal - PEP ( this is how major changes happen in the community )
+
+---
+
+
+Linux Scripting and Administration
+
+# for this example we have a json file called input.json and it has the following code
+
+  {
+        "name": "Jason"
+        "hobbies": ["music", "programming", "games"],
+        "job": "Software Developer"
+  }
+  
+    vi input.py
+        import json                                                         # this will allow us to work with the data
+
+        with open('input.json', 'r') as input:                              # this will open the file input.json above as read only to pull data
+                obj = json.load(input)
+                with open('output.txt', 'w') as output:                     # this will open a new file called output.txt and the following code will write the hobby list to it
+                        output.write(obj['name'] + "'s Hobbies:\n")
+                        for hobby in obj['hobbies']:
+                                output.write(hobby+ "\n")
+                            
+ # now lets look at manipulating processes
+ 
+    vi 
+        import subprocess
+        pl = subprocess.Popen(['ps', '-U', '0'], stdout=subprocess.PIPE).communicate()[0]           # This will write the output of ps -U to the variable 'pl' then we print it with the next line
+        print(pl.decode('utf-8'))
+        
+        
+Web Development Example 
+
+    Examples of different types of web development:
+        APIs - Flask, Bottle, Pyramid
+        Websites - Django, TurboGears, web2py
+        Apps - Plone, django-cms, mezzanine
+
+    vi service.py                                                               # define flask service
+        from flask import Flask
+        app = Flask(__name__)
+        
+        @app.route("/")
+        def hello():
+                return "Hello World!"
+        
+        @app.route("/usr/<username>")
+        def show_user(username):
+            return "User: %s" % username
+        
+    FLASK_APP=service.py flask run                                              # Run the application
+    curl localhost:5000                                                         # you should see 'hello world' at this point
+    curl localhost:5000/user/jolson                                             # this will print "User: jolson" and may require some setup on the actual host - the demo didnt specify
+    
+    django-admin startproject mysite
+    cd mysite
+    tree .                                                                      # note the different files here
+    python3 manage.py runserver
+    
+    go to localhost:8000 
+    
+Application Scripting
+
+    # We will use blender in this demo - (blender 3d)
+    1. Change the bottom view to the python console view - full on repel
+    2. bpy.data.objects - this will show all objects (number of objects)
+    3. list(bpy.data.objects) - this will make them into a list
+    4. cube = bpy.data.objects["Cube"]
+        cube.location                                                             # drag the cube after this command to see the changes - run the command again
+    
+    import mathutils
+    cube.location += mathutils.Vector((1, 1, 1))                                  # this will move the cube 
+    
+
+Data Science
+
+    Big Data and Machine learning
+    
+    
+    
+    
