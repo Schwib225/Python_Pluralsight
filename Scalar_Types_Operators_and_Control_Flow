@@ -1,0 +1,130 @@
+Scalar types
+  
+  int - arbitrary precision integers (42)
+  float - 64-bit floating point numbers (4.2)
+  NoneType - the null object
+  True/False - boolean logical values
+  
+  int                                         # these can be used beyond just a whole number, use 0b, 0o and 0x to define binary, octal and hexidecimal repsectively
+    0b10 - binary
+    0o10 - octal
+    0x10 - hex
+    int(3.5)                                  # converts to whole number - towards 0
+    int(-3.5)
+    int("496")                                # converts string to int
+    int("10000", 3)                           # converts from base 3 
+    
+  float
+    3e8                                       # 3 to the power of 8
+    1.616e-35                                 
+    float(7)                                  # converts to float 7.0
+    float("1.618")                            # converts string to float
+    float("nan")                              # nan - not a number
+    float("inf")                              # short for infinity
+    float("-inf")                             # short for negative infinity
+    
+  None
+    Null value - used to represent the absense of a value
+    a = None
+    a is None = True
+    
+  Bool
+    True 
+    False
+    Falsy and Truthy - only 0 is considered falsy, while all other values are considered truthy, the same applies for lists, empty lists are falsy, none empty are truthy, same with strings
+    
+    Truthy Ex:
+      bool(0.207)
+      bool(-1.117)
+      bool([1, 5, 9])
+      bool("Spam")
+    Falsy Ex:
+      bool(0)
+      bool([])
+      bool("")
+    Important note: strings of "True" and "False" are considered not empty so they will be truthy. keep this in mind
+    
+    
+Relational Operators
+  
+  == Value equality/equivalence
+  != Value inequality/inequivalence
+  < Less than
+  > Greater than
+  <= Less than or equal
+  >= Greater than or equal
+  
+  g = 20
+  g == 20 - True
+  g == 13 - False
+  g != 20 - False
+  g != 13 - True
+  g > 20 - False
+  g < 20 - False
+  
+Control Flow
+  
+  Conditional statements - If statements
+  
+    if expression:
+        block
+    if True:
+        print("It's True!")
+        
+    if False:
+        print("It's True!")           # this won't print because its not false
+    
+    if bool("eggs"):                  # Evaluates to true since it isn't empty
+        print("Yes please!")
+        
+    if "eggs":                        # will print the statement because its true since it isn't emptyc
+        print("Yes please!")        
+  
+    # Example 2 - nested if/then (note this isn't ideal. Flat is better than nested)
+    h = 42
+    if h > 50:
+      print("Greater than 50")
+    else:
+        if h < 20:
+            print("Less than 20")
+        else:
+            print("Between 20 and 50")
+    
+    # This is the Flat version of the above code and is more ideal
+    if h > 50
+        print("greater than 50")
+    elif h < 20:
+        print("Less than 20")
+    else:
+        print("Between 20 and 50")
+    
+    
+While Loops
+    
+    while expression:
+        block
+        
+    c = 5 
+    while c != 0:
+        print(c)
+        c-= 1
+        
+    OR
+    
+    c = 5 
+    while c:                                # this will work because once it evaluates to 0, it will now be falsy instead of truthy - but this could be seen as unpythonic (explicit is better than implicit)
+        print(c)
+        c -= 1
+        
+    while True:
+        pass                                # This is an infinite loop, use ctrl-c to escape it
+        
+    break                                   # this will jump out of the inner most executing loop
+    
+    while True:                             # this short script will create an infinite loop until we enter a number divisible by 7 then it will escape the loop
+        reponse = input()
+        if int(response) % 7 == 0:
+            break
+        
+        
+    
