@@ -1,0 +1,132 @@
+Collections
+
+    str
+    bytes
+    list
+    dict
+    
+str - Data type for strings in python - immutable 
+    immutable - once it is built, you cant destroy its contents
+    'This is a string'
+    "This is a string"
+    
+String Literals
+
+    "first" "second"
+    'firstsecond'
+    
+    Strings with New lines - 2 options                                  # Universal Newline support - PEP 278 python.org/dev/peps/pep-0278/
+        Multiline Strings 
+            
+            """ This is                                                 #   use single or double quotes
+            a multiline 
+            string """
+            
+        Escape sequences                                                # Theres a ton of options here. view the documentation here: docs.python.org/3/reference/lexical_analysis.html#strings
+            'This is \na multiline\nstring'
+            
+            "This is a \" in a string"
+            
+            "This is a \' i a string"
+            
+            
+        String Features
+            
+            path = r'C:\Users\Merlin\Documents\Spells'                  # this is a raw string (prefix with r), which does not support escape characters
+            print(path)
+            
+            str(6.02e23)
+            s = 'parrot'
+            s[4]                                                        # yields 'o' since its in the 4 position
+            type(s[4])                                                  # class 'str'
+           
+           help(str)                                                    # this will show you just about everything
+           
+           c = 'oslo'
+           c.capitalize()                                               # returns a new string 'Oslo'
+  
+Bytes
+    bytes - data type for sequences of bytes
+    Raw binary data
+    
+    b'data'
+    b"data"
+    
+    d = b'some bytes'
+    d[0]
+    d.split()
+    
+    # note it is possible to encode/decode between binary and strings however we need to know what encoding is being used. Use the following link as a resource
+    docs.python.org/3/library/codecs.html#standard-encodings
+    
+    norsk = "This is an example that uses a lot of characters"
+    data = english.encode('utf8')
+    data
+  
+list
+    lists are mutable and can have values replaced as opposed to strings
+    
+    [1, 9, 8]
+    a = ["apple", "orange", "pear"]
+    a[1]                                                            # this prints 'orange'
+    a[1] = 7                                                        # this replaces 'orange' with 7
+    
+    b = []                                                          # create empty list
+    b.append(1.618)                                                 # add value
+    b                                                               # verify
+    b.append(1.414)                                                 # add second value
+    b                                                               # verify
+    
+    list("characters")                                              # will make a list of each individual character
+    
+    list = ['bear',                                                 # you can also make a list this way to improve readability
+            ' giraffe',
+            'elephant',
+            'caterpillar', ]
+            
+Dict 
+    key value pairings
+
+    d = {'alice': '878-8728-922', 'bob': '256-5262-124', 'eve': '198-2321-787'}
+    d['alice']                                                                              # prints alice's phone number
+    d['alice'] = '966-4532-6272'                                                            # assign a new value
+    d
+    d['charles'] = 334-5551-913'                                                            # this value isn't in the table, but it will be added
+    
+    e = {}                                                                                  # this is how you create an empty dictionary, need curly braces
+
+for-loop
+    for item in iterable:
+        ...body...
+        
+    cities = ["london", "new york", "paris", "oslo", "helsinki"]                            # list example
+    
+    for city in cities:
+        print(city)
+        
+    colors {'crimson': 0xdc143c, 'coral': 0xff7f50, 'teal': 0x008080}                       # dictionary example - note the color codes return in decimal instead of hex
+    for color in colors:
+        print(color, colors[color]
+    
+Putting it all together
+
+    from urllib.request import urlopen
+    
+    story = urlopen('http://sixty-north.com/c/t.txt')
+    story_words = []
+    for line in story:
+        line_words = line.split()
+        for word in line_words:
+            story_words.append(word)
+    
+    story.close()
+    story_words                                                                             # note this will return all bytes values of words - we need to convert this 
+    
+    story = urlopen('http://sixty-north.com/c/t.txt')
+    story_words = []
+    for line in story:
+        line_words = line.decode('utf8').split()                                            # add the decode here
+        for word in line_words:
+            story_words.append(word)
+            
+    
