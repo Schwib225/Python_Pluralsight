@@ -1,0 +1,149 @@
+Modules
+
+    # Create a file words.py within a folder corepy on your computer
+    # Add the following code and run it from the cmd prompt, cd to the proper dir and then use 'python words.py' and it should print all the words it has found
+    
+    from urllib.request import urlopen
+
+    story = urlopen('http://sixty-north.com/c/t.txt')
+    story_words = []
+    for line in story:
+        line_words = line.decode('utf8').split()
+        for word in line_words:
+            story_words.append(word)
+
+    for word in story_words:
+            print(word)
+            
+            
+Functions
+    
+    Examples of syntax:
+    
+    def square(x):
+        return x * x
+        
+    def launch_missles():               # this code won't return anything, the print statement is a side effect of the print funtion, so it isn't truely 'returning' a value0
+        print("Missles launched!")
+        
+    launch_missles()                    # will print the above statement
+    
+    Early Return
+    
+    def even_or_odd(n):
+        if n % 2 == 0:
+            print('even')
+            return
+        print("odd")
+    
+    w = even_or_odd(31)
+    w is None
+    
+    
+    def nth_root(radicand, n):
+        return radicand ** (1/n)
+        
+    nth_root(16, 2)
+    nth_root(27, 3)
+    
+    
+__name__
+
+    def fetch_words(): 
+        
+        story = urlopen('http://sixty-north.com/c/t.txt')
+        story_words = []
+        for line in story:
+            line_words = line.decode('utf8').split()
+            for word in line_words:
+                story_words.append(word)
+
+        for word in story_words:
+                print(word)
+            
+    # You can run the above code by running the following in python
+    from words import fetch_words
+    fetch_words()
+    
+    # Note the above if we were to run directly from the command line, we wouldn't be able to call this function, thats where __name__ comes in so we can actually use it in a script from the os
+    # Like so:
+    
+    def fetch_words(): 
+
+    story = urlopen('http://sixty-north.com/c/t.txt')
+    story_words = []
+    for line in story:
+        line_words = line.decode('utf8').split()
+        for word in line_words:
+            story_words.append(word)
+
+    for word in story_words:
+            print(word)
+            
+    if __name__ == '__main__':                                      # By default, it will return fetch_words because it is defined as __main__ but this isn't always the case
+        fetch_words()
+    
+    # now run the words.py script from the command line again
+
+The Python execution model
+
+    def is a statement
+    top level functions are defined when a module is imported to run
+    
+Command Line Arguments
+
+    def fetch_words(): 
+
+    story = urlopen('http://sixty-north.com/c/t.txt')
+    story_words = []
+    for line in story:
+        line_words = line.decode('utf8').split()
+        for word in line_words:
+            story_words.append(word)
+
+    def print_words(story_words):
+        for word in story_words:
+                print(word)
+    
+    def main():
+        words = fetch_words()
+        print_words(words)
+    
+    if __name__ == '__main__':                             
+        main()
+    
+    # Test the above in the REPL with the following
+    from words import (fetch_words, print_words)
+    print_words(fetch_words())
+    
+    or 
+    
+    from words import * 
+    fetch_words()
+    main()
+    print_words([1, 4, 6, 9])                                                   # note thte name print_words isn't really what the program does, since it prints anything, so we will need to make changes
+    
+    
+   # Change the print_words function to be the following:
+    def fetch_words(url): 
+        story = urlopen(url)
+        story_words = []
+        for line in story:
+            line_words = line.decode('utf8').split()
+            for word in line_words:
+                story_words.append(word)
+
+   
+   def print_items(items):
+    for item in items:
+            print(item)
+   
+   def main():
+    url = sys.argv[1]
+    words = fetch_words()
+    print_items(words)                                                          # also modify this
+    
+    # Final note - use 2 lines of white space between functions, and 1 line between different sections of code within functions
+
+   
+   
