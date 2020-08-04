@@ -77,7 +77,119 @@ Return Semantics
     e = f(c)
     c is e                               # this is true because no copies are being made here  - it references the same object
     
+Function Arguments
+
+    Default Argument Values
+        
+        def banner(message, border='-'):                                    # In this case, the border value is the default value, not all defaults must come after values we need input for
+            line = border * len(message)
+            print(line)
+            print(message)
+            print(line)
+            
+        banner("Norwegian Blue")
+            
+        banner("Sun, Moon and Starts", "*")                                 # this will allow us to use * instead of - as the default
+        
+        # Keyword arguments must be supplied after positional arguments
+        
+        When are default values evaluated?
+        
+        import time
+        time.ctime()
+        
+        def show_default(arg=time.ctime()):
+            print(arg)
+            
+        show_default()                                      # note the time, then try this 3 more times - it doesn't change since the function is evaluated when it is defined and no other time
+   
+    Mutable Default Values
+        
+        def add_spam(menu=[]):
+            menu.append("spam")
+            return menu
+        
+        breakfast = ['bacon', 'eggs']
+        add_spam(breakfast)
+        
+        lunch = ['baked beans']
+        add_spam(lunch)
+        
+        # now lets look at what happens upon running add_spam without a value
+        add_spam()
+        add_spam()                                          # note that it is adding spam to an empty list, thus adding to a mutable value which we don't want
+        
+        # the solution below
     
+    Immutable Default Values
+        
+        def add_spam(menu=None):
+            if menu is None:
+                menu = []
+            menu.append('spam')
+            return menu
+        
+        add_spam()
+        add_spam()                          # note that doing it this way it only adds spam once, this allows us to not have huge object lists of the same value
     
+Python's Type System 
+
+    def add(a, b):                          # this allows for basically anything to be added (see examples below)
+        return a + b
     
+    add(5, 7)
+    add(3.1, 2.4)
+    add("news", "paper")
     
+    # However this will not work
+    add("The answer is", 42)                # will fail due to int/str TypeError
+    
+Scopes
+
+    Local - Inside the current function
+    Enclosing - Inside enclosing functions
+    Global - At the top level of the module
+    Build-in - In the special builtins module
+    
+    LEGB Rule (like PEMDAS or SADMEP)
+
+    Rebinding Global Names
+    
+        count = 0
+        def show_count():
+            print(count)
+        def set_count(c):
+            count = c
+            
+        show_count()
+        set_count(5)
+        show_count()                # this will print 0 because the global variable isn't modified within the cuntion
+    
+        # The fix (global variable)
+        
+        def set_count(c):
+            global count
+            count = c 
+        
+        show_count()
+        set_count(5)
+        show_count()                # Now this will work properly
+        
+        
+Moment of Zen
+
+    We follow patterns, Not to kill complexity, but to master it
+
+Everything is an Object
+
+    import words
+    type(words)                           # returns the type of the module words 
+    dir(words)                            # this returns a list of the module attributes, lists all functions and imported modules for example, additionally shows the dunder name and doc info
+    type(words.fetch_words)
+    dir(words.fetch_words)
+    
+    words.fetch_words.__name__            # details of dunder name
+    words.fetch_words.__doc__             # details of the doc info
+
+
+
