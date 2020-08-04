@@ -1,0 +1,83 @@
+Objects
+
+    id()
+
+    # Notice the different values have their own object id
+    a = 496
+    id(a)
+    b = 1729
+    id(b)
+
+    # Once you reference b to a - it uses the same object id and we should see that reflected here:
+    b = a 
+
+    id(b)
+    id(a)
+
+    id(a) == id(b)                          # should return true
+    a is b                                  # same
+    a is None
+
+Mutable Objects
+
+    r = [2, 4, 6]
+    r
+    s = r
+    s[1] = 17                           # this will modify 4 to 17
+    s is r                              # this is true, so essentially we have modified the object that is referenced by both s and r. Thus the values will be 2, 17, 6 for both
+    
+Value vs Identity Equality
+
+    p = [4, 7, 11]
+    q = [4, 7, 11]
+    
+    p == q                              # Returns true
+    
+    p is q                              # Returns false because they are not the same object
+    
+Passing Arguments and Return values
+
+    m = [9, 15, 24]
+    def modify(k):
+        k.append(39)
+        print("k =", k)
+        
+    modify(m)
+    
+    k = [9, 15, 24, 39]                 # note that this will have the same object id of m because we passed the object m into the function to modify it, there is no copy of m unless that is what the code is made to do, and it isn't in this case
+    
+    
+    f = [14, 23, 37]
+    def replace(g)
+        g = [17, 28, 45]
+        print("g =", g)
+        
+    replace(f)
+    g = [17, 28, 45]                    # this object will actually be a new object since it is not referencing f at all, it is completely making a new object 
+    f                                   # this will still refer to the original value - we didn't replace f, we just use the values within f, then modified those references
+    
+Mutable Arguements
+
+    def replace_contents(g):
+        g[0] = 17
+        g[1] = 28
+        g[2] = 45
+        print("g = ", g)
+     f = [14, 23, 37]
+     replace_contents(f)
+     g = [17, 28, 45]
+     f                                  # prints the same as g - since we have copied everything with the function 
+    
+Return Semantics
+    
+    def f(d):
+        return d
+    
+    c = [6, 10, 16]
+    e = f(c)
+    c is e                               # this is true because no copies are being made here  - it references the same object
+    
+    
+    
+    
+    
