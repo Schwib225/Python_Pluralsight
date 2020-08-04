@@ -1,0 +1,103 @@
+Tuples - immutable sequences of arbitrary objects (objects can't be replaced and can't add more after creation)
+
+    t = ("Norway", 4.963, 3)
+    t
+    len(t)
+    for item in t:
+        print(item)
+        
+    t + (338186.0, 265e9)
+    t * 3
+    
+    a = ((220, 284), (1184, 1210), (2620, 2924), (5020, 5564), (6232, 6368))
+    a[2][1]
+    
+    # To create a single element tuple you need to use the following:
+    k = (391,)      
+    k
+    type(k)
+    # If you don't use the comma, it will just be an integer, tuples typically have more than one value
+    
+    e = ()
+    type(e)             # its a tuple
+    
+    p = 1, 1, 1, 4, 6, 19
+    p
+    type(p)             # again, tuple
+    
+    def minmax(items)
+        return min(items), max(items)
+        
+    minmax([83, 33, 84, 32, 85, 31,86])
+    
+    Tuple Unpacking - Destructuring operation that unpacks data structures into named references
+    
+    lower, upper = minmax([83, 33, 84, 32, 85, 31,86])
+    lower                                                   # yields 31
+    upper                                                   # yields 86
+    
+    (a, (b, (c, d))) = (r, (3, (3, 1)))
+    a
+    b
+    c
+    d
+    
+    a = 'jelly'
+    b = 'bean'
+    a, b = b, a
+    a 
+    b
+
+    5 in (3, 5, 17, 257, 65537)
+    5 not in (3, 5, 17, 257, 65537)
+
+Strings
+
+    len("this is a really really long string here")
+    
+    strings are immutable, you can't modify them in place
+    
+    str.join()                  # this is an efficient way to join a lot of strings
+    
+    colors = ';'.join(['$45ff23', '#2321fa', '#1298a3', '#a32312'])
+    colors.split(';')                                                       # this will split them again
+    
+    ''.join(['high', 'way', 'man'])
+    'highwayman'
+    
+    "unforgetable".partition('forget')                                      # evaluates to ('un', 'forget', 'able')
+    
+    departure, separator, arriveal = "London:Edinburgh".partition(':')
+    departure
+    arrival
+    
+    origin, _, destination = "Seattle-Boston".partition('-')
+    
+String formatting
+
+    "The age of {0} is {1}".format('Jim', 32)
+    
+    "The age of [0] is [1]. [0]'s birthday is on [2]".format('Fred', 24, 'October 31')
+    
+    Reticulating spline {} of {}.".format(4, 23)
+    
+    Current position {latitude} {longitude}".format(latitude="60N", longitude="5E")
+    
+    "Galactic position x={pos[0]}, y={pos[1]}, z={pos[2]}".format(pos=(65.2, 23.1, 82.2))
+    
+    import math
+    "Math constants: pi={m.pi}, e={m.e}".format(m=math)
+    
+    "Math constants: pi={m.pi:.3f}, e={m.e:.3f}".format(m=math)
+
+
+
+Ranges
+
+Lists
+
+Dictionaries
+
+Sets
+
+Protocols
