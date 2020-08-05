@@ -90,13 +90,269 @@ String formatting
     
     "Math constants: pi={m.pi:.3f}, e={m.e:.3f}".format(m=math)
 
-
+    value = 4 * 20
+    'The value is {value};.format(value=value)
+    
+    PEP 498 - Literal String Interpolation (f-strings)
+    
+    # F string examples
+    
+    value = 4 * 20
+    f'The value is {value}'
+    
+    import datetime
+    f'The current time is {datetime.datetime.now().isoformat()}.'
+    
+    import math
+    f'Math constants: pi={math.pi}, e={math.e}'
+    
+    f'Math constants: pi={math.pi:.3f}, e={math.e:.3f}
+    
+    help(str)                                                   # this will list all other string methods, get to know them
 
 Ranges
 
+    range(5)
+    
+    for i in range(5):
+        print(i)
+
+    list(range(10, 15))                 # lists 10-14
+    list(range(0, 10, 2))               # this will step by 2
+    
+    range(stop)
+    range(start, stop)
+    range(start, stop, step)
+    
+    # Range doesn't support keyword args
+    
+    # if you need a counter rather than using range, just use the built in enumerate function
+    
+    t = [6, 372, 8862, 148800, 2096886]
+    for p in enumerate(t):
+        print(p)
+        
+    # or just extract from the tuple
+    
+    for i, v in enumerate(t):
+        print(f"i = {i}, v = {v}")
+    
+
 Lists
 
+    Negative indecies 
+    
+        r = [1, -4, 10, -16, 15]
+        r[-1]               # prints 15
+        r[-2]               # prints -16
+        r[len(r) - 1]       # prints 15 and we can avoid this complexity by using negatives - note -0 and 0 are the same
+    
+    Slicing - Extended for of indexing for referring to a portion of a list or other sequence
+    
+    s = [3, 186, 4431, 74400, 1048443]
+    s[1:3]
+    s[1:-1]
+    s[2:]
+    s[:2]
+    s[:]
+    t = s 
+    t is s                  # True
+    
+    r = s[:]
+    r is s                  # False
+    r == s                  # True
+    
+    # you can also use the copy method to easily read a list
+    
+    u = s.copy()
+    u is s                  # False
+    
+    v = list(s)
+    
+    # Note all of these methods use a 'shallow' copy - they copy the lists but do not copy the actual object initially referenced, only the values in the object
+
+    a = [ [1, 2], [3, 4] ]
+    b = a[:]
+    a is b              # False
+    a == b              # True 
+    a[0]
+    b[0]
+    a[0] is b[0]        # True, they are referencing the same object
+    a[0] = [8, 9]
+    a[0]
+    b[0]                # note that now the lists have different values - but the second index value is still referencing the same thing, see below
+    
+    a[1].append(5)
+    a[1]                # modified
+    b[1]                # same as a[1]
+    a
+    b                   # notice the differences now
+    
+   # Another example
+   c = [21, 37]
+   d = c * 4
+   d
+   
+   [0] * 9
+   
+   s = [ [ -1, +1] ] * 5
+   s
+   s[2].append(7) 
+   s                                # notice here that 7 is appended to all lists - this is because each list is a reference to the original nested list
+   
+   list.index()                     # Find the location of an object in a list, returns the index of the first list element which is equal to the argument
+   
+   w = "the quick brown fox jumps over the lazy dog".split()
+   w
+   i = w.index('fox')
+   i                        # should print 3
+   w[i]                     # 'fox'
+   w.index('unicorn')       # ValueError because it doesnt exist in the list
+   w.count("the")           # 2 instances of the word 'the'
+   
+   # IN and NOT IN
+   
+   37 in [1, 78, 9, 37, 34, 53]
+   78 not in [1, 78, 9, 37, 34, 53]
+
+    # del and removing from lists
+    
+    u = "jackdaws love my big sphinx of quartz".split()
+    u
+    
+    del u[3]
+    u                       # 'big' removed from the list
+    u.remove('jackdaws')
+    u                       # jackdaws removed
+    
+    del u[u.index('quartz')]
+    u.remove('pyramid')             # this will throw a valueError because it doesn't exist in the list
+    
+    # Inserting into a list
+    a = 'I accidentally the whole universe'.split()
+    a
+    a.insert(2, "destroyed")
+    a
+    ' '.join(a)                     # join the list together with a blank space
+    
+    m = [2, 1, 3]
+    n = [4, 7, 11]
+    k = m + n
+    k
+    
+    k += [18, 29, 47]
+    k
+    
+    k.extend([76, 129, 199])
+    k                                # note everything we added is here now - all 3 options will work
+    
+    list.reverse and list.sort()
+    
+    g =- [1, 11, 21]
+    g.reverse()
+    g
+    
+    d = [17, 41, 29]
+    d.sort()
+    d
+    
+    d.sort(reverse=True)            # self explanitory
+    d
+    
+    # Key parameter to list.sort()
+        - Can be any callable object that accepts a single parameter
+        - Items passed to callable and sorted on its return value
+        
+    
+     h = 'not perplexing do handwriting family where I illegibly know doctors'.split()
+     h
+     h.sort(key=len)
+     h
+     ' '.join(h)
+
+    Reversing and sorting into copies
+        - reversed() and sorted() are the out of place equivalents to list.reverse() and list.sort()
+        - They return a reverse iterator and a new list respectively
+
+        x = [4, 9, 2, 1]
+        y = sorted(x)
+        y
+        x
+        
+        p = [9, 3, 1, 0]
+        q = reversed(p)
+        q                                   # note this will return a list_reverseiterator object which must be converted to a list
+        list(q)                             # done! 
+        
+
 Dictionaries
+
+    urls = { 'Google': 'http://google.com',
+             'Pluralsight': 'http://pluralsight.com',
+             'Sixty North': 'http://sixty-north.com',
+             'Microsoft': 'http://microsoft.com' }
+             
+    urls['Pluralsight']         # returns web address value from the key Pluralsight above
+    
+    # Keys must be immutable and unchanged while values may be mutable and can change (and often do)
+    # Note: Never rely on the order of a dictionary because it is essentially random each time it is ran - look for specific values. its not the same as a list
+
+    names_and_ages = [('Alice', 32), ('Bob', 48), ('Charlie', 28), ('Daniel', 33) ]
+    d = dict(names_and_ages
+    d                           # Converted to a dictionary with dict()
+    
+    phonetic = dict(a='alpha', b='bravo', c='charlie', d='delta', e='echo', f='foxtrot')
+    phonetic
+    
+    # By default, dictionary copying is shallow - only copies the references to key/value, not the object themselves
+    
+    d = dict(goldenrod=0xDAA520, indigo=0x4B0082, seashell=0xFFF5EE)
+    e = d.copy()
+    e
+    
+    f = dict(e)
+    
+    # Extending a dictionary
+    dict.update()
+    
+    g = dict(wheat=0xF5DEB3, khaki=0xF0E68c, crimson=0xDC143C)
+    f.update(g)
+    f                   # now you should see the entries from both dictionaries in this object
+    
+    stocks = {'GOOG': 891, 'AAPL': 416, 'IBM':194}
+    stocks.update({'GOOG': 894, 'YHOO': 25})
+    stocks              # you will see GOOG updated and YHOO added to the list
+    
+    Dictionary Iteration
+        - Dictionaries yield the next key on each iteration
+        - Values can be retrieved using the square-bracket operator
+       
+        colors = dict(aquamarine='#7FFFD4', burleywood='#DEB887',
+                      chartreuse='#7FFF00', cornflower='$6495ED',
+                      firebrick='#B22222', honeydew='#F0FFF0',
+                      maroon='#B03060', sienna='#A0522D')
+        for key in colors:
+            print(f"{key} => {colors[key]}")
+            
+        # If we only care about values we can use the value method
+        
+        for value in colors.values():
+            print(value)
+            
+        # or for keys specifically
+        
+        for key in colors.keys():
+            print(key)
+            
+        dict.items()        # each key/value pair is called an item
+                            # Iterates over keys and values in tandem, Yields a (key, value) tuple on each iteration
+                            
+        for key, value in colors.items():
+            print(f"{key} => {value}")
+        
+    
+    
+
 
 Sets
 
