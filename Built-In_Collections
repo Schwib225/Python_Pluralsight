@@ -298,7 +298,7 @@ Dictionaries
     # Note: Never rely on the order of a dictionary because it is essentially random each time it is ran - look for specific values. its not the same as a list
 
     names_and_ages = [('Alice', 32), ('Bob', 48), ('Charlie', 28), ('Daniel', 33) ]
-    d = dict(names_and_ages
+    d = dict(names_and_ages)
     d                           # Converted to a dictionary with dict()
     
     phonetic = dict(a='alpha', b='bravo', c='charlie', d='delta', e='echo', f='foxtrot')
@@ -350,10 +350,130 @@ Dictionaries
         for key, value in colors.items():
             print(f"{key} => {value}")
         
+    # We can use IN and NOT IN to check and see if values are in a dictionary
+    
+    # Del
+    
+    z = {'H':1, 'Tc': 43, 'Xe': 54, 'Rf': 104, 'Fm':100}
+    del z['Fy']
+    z
+    
+    m = {'H': [1, 2, 3],
+         'He': [3, 4],
+         'Li': [6, 7],
+         'Be': [7, 9, 10],
+         'B': [10, 11],
+         'C': [11, 12, 13, 14]}
+    m['H'] += [4, 5, 6, 7]              # we can modify the list in the value pair, this isn't modifying the dictionary itself
+    m
+    
+    m['N'] = [13, 14, 15]               # since the dictionary itself is mutable we can add new items
+    m
+    
+    from pprint import pprint as pp     # we need to modify the name of pprint since it is the module and function name, this is poor design but its what needs to be done here
+    pp(m)                               # this will format the dictionary much more cleanly
     
     
-
-
 Sets
-
+    Unordered collection of unique elements - note the unique, it is used to remove duplicates commonly
+    Sets are Mutable
+    Elements in sets must be immutable
+    
+    p = {6, 28, 496, 8128, 33550336}
+    p
+    type(p)          # its a set (curley braces create a set but not when empty)
+    d = {}           # this creates a dictionary
+    type(d)
+    
+    e = set()        # this will create an empty set
+    e
+    
+    s = set([2, 4, 16, 64, 4096, 65536, 262144]) 
+    s                               # note the set - the order doesn't stay consistent so be careful of that
+    
+    t = [1, 4, 2, 1, 7, 9, 9]
+    set(t)                          # removes all duplicates
+    
+    for x in {1, 2, 4, 8, 16, 32}:      # note the order is random
+        print(x)
+    
+    q = { 2, 9, 6, 4 }
+    3 in q                              # False
+    3 not in q                          # True
+    
+    
+    # Adding elements to sets
+    k = { 81, 108 }
+    k.add(54)
+    k
+    k.add(12)
+    k
+    k.add(108)                          # note that since this value is already in the set, nothing happens and no value error is returned, it is just dropped
+    k
+    k.update([37, 128, 97])             # This will add multiple values to the set
+    k
+    # Removing elements from sets 
+    
+    k.remove(98)                        # This will give a keyError because it doesn't exist, but this is how you remove a key
+    k.discard(98)                       # This method will not say anything is there is no value present that was specified, so this is more ideal than remove
+    k
+    
+    j = k.copy()                        # this will copy references but no objects (as with other copies we have shown)
+    j
+    
+    m = set(j)                          # This can also be used to copy but again doesn't copy the object, only references
+    
+    Set Algebra
+        
+        Union
+        Difference
+        Intersection
+        Subset
+        Superset
+        Disjoint
+        
+        # Examples of the above 
+        
+        blue_eyes = {'Olivia', 'Harry', 'Lily', 'Jack', 'Amelia'}
+        blond_hair = {'Harry', 'Jack', 'Amelia', 'Mia', 'Joshua'}
+        smell_hcn = {'Harry', 'Amelia'}
+        taste_ptc = {'Harry', 'Lily', 'AMelia', 'Lola'}
+        o_blood = {'Mia', 'Joshua', 'Lily', 'Olivia'}
+        b_blood = {'Amelia', 'Jack'}
+        a_blood = {'Harry'}
+        ab_blood = {'Joshua', 'Lola'}
+        
+        blue_eyes.union(blond_hair)                                                     # combines the 2 sets together
+        
+        blue_eyes.union(blond_hair) == blond_hair.union(blue_eyes)                      # True
+        
+        blue_eyes.intersection(blond_hair)                                              # lists only people with both blue eyees and blonde hair
+    
+        blue_eyes.intersection(blond_hair) == blond_hair.intersection(blue_eyes)        # True
+        
+        blond_hair.difference(blue_eyes)                                                # lists the difference between blondes and blue eyes
+        
+        blond_hair.difference(blue_eyes) == blue_eyes.difference(blond_hair)            # False
+        
+        blond_hair.symmetric_difference(blue_eyes)                                      # finds unique entries that are in the first or the second set, but not both
+        
+        blond_hair.symmetric_difference(blue_eyes) == blue_eyes.symmetric_difference(blond_hair)    # True - the unique entries are going to be the same either way 
+        
+        smell_hcn.issubset(blond_hair)                                                  # this checks to see if all parameters in the smell_hcn are also present in blond_hair (True)
+    
+        taste_ptc.issuperset(smell_hcn)                                                 # This checks that everyone in the smell_hcn set is also in the taste_ptc set
+        
+        a_blood.isdisjoint(o_blood)                                                     # To test that each set has no member in common, use is disjoint method
+        
 Protocols
+
+    A set of operations that a type must support to implement the protocol
+    Do not need to be defined as interfaces or base classes
+    Types only need to provide functioning implementations
+
+
+
+
+
+
+
