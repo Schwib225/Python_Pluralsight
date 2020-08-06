@@ -1,0 +1,192 @@
+Exception handling
+    Mechanism for interrupting normal program flow and continuing in surrounding context
+    
+    Key Concepts
+    1. Raising an exception
+    2. Handling an exception
+    3. Unhandled exceptions
+    4. Exception Objects
+
+Exceptions and Control Flow
+
+    # We will use the following module for these examples since the REPL isn't quite as easy to use in this case
+    
+    exceptional.py
+    
+        DIGIT_MAP = {
+            'zero': '0',
+            'one': '1',
+            'two': '2',
+            'three': '3',
+            'four': '4',
+            'five': '5',
+            'six': '6',
+            'seven': '7',
+            'eight': '8',
+            'nine': '9',
+        }
+
+        def convert(s):
+            number = ''
+            for token in s:
+                number += DIGIT_MAP[token]
+            x = int(number)
+            return x
+            
+    # From the REPL
+    
+        from exceptional import convert
+        convert("one three three seven".split())                # this works
+        
+        convert("around one grillion".split())                  # this throws a KeyError because 'around' isn't defined in our list
+
+Handling Exceptions
+
+    # Lets modify our function to use a try/except construct
+
+
+        def convert(s):
+            try:                                                # try-block
+                number = ''                                     # raise exceptions
+                for token in s:
+                    number += DIGIT_MAP[token]
+                x = int(number)
+                print(f"Conversion succeeded! x = {x}")
+            except KeyError:                                    # except-block
+                print("Conversion failed!")
+                x = -1                                          # handle exceptions for key error
+            except TypeError                                    # except block
+                print("Conversion failed!")
+                x = -1                                          # handle exceptions for type error
+            return x
+
+    # The above will handle the following:
+    
+    from exceptional import convert
+    convert("three four".split())                               # works as intended
+    convert("eleventeen".split())                               # would normally throw a KeyError
+    convert(512)                                                # this would normally throw a TypeError
+
+    # Lets clean up the function since we have duplicate code for key and type errors, consider the following
+    
+         def convert(s):
+            x = -1                                              # By pre-defining x to the fail value, when it is successful it will change automatically, if not, we only need to print the conversion failed message             try:                                                
+                number = ''                                    
+                for token in s:
+                    number += DIGIT_MAP[token]
+                x = int(number)
+                print(f"Conversion succeeded! x = {x}")
+            except (KeyError, TypeError):                       # Merge except blocks                              
+                print("Conversion failed!")
+            return x 
+    # Test it out
+    
+    from exceptional import convert
+    convert("two nine".split())                                 # should work as intended
+    convert("elephant".split())                                 # should throw -1
+    convert(451)                                                # should throw -1
+
+Exceptions and Programming Errors
+
+    IndentationError, SyntaxError, and NameErrors are all errors that are programmer errors and should be fixed in the code and not handled at runtime (should almost never be caught)
+
+    # Normally you can't pass nothing within an exception block, so since we want to remove the print statements, then lets use the 'pass' statement so we don't receive an error like the ones above
+
+    def convert(s):                                             # Use 'pass' to return the -1 value instead 
+        x = -1
+        try: 
+            number = ''
+            for token in s:
+                number += DIGIT_MAP[token]
+            x = int(number)
+        except (KeyError, TypeError):
+            pass
+        return x 
+        
+    OR
+    
+    def convert(s):                                             # Just return different values based on what heppens instead of passing 
+    """Convert a string to an integer."""
+    try:                                                
+        number = ''                                    
+        for token in s:
+            number += DIGIT_MAP[token]
+        return int(number)
+    except (KeyError, TypeError):                                               
+        return -1
+
+
+    Accessing Eception Objects
+    
+        import sys
+        DIGIT_MAPT = ... 
+
+        def convert(s): 
+            try: 
+                number = ''
+                for token in s:
+                    number += DIGIT_MAP[token]
+                x = int(number)
+            except (KeyError, TypeError) as e:              # Use as keyword to make it a variable
+                print(f"Conversion error: {e!r}",           # Print error message
+                      file=sys.stderr)                      # Use stderr to print
+            return x 
+            
+            
+        # Note if you use f"{expression!r}" the repr expression will be added into your string - this gives us more detail about the type of expression
+        
+        from exceptional import convert
+        convert("fail".split())                             # this will tell you the key 'fail' has failed conversion
+
+Re-raising Exceptions
+
+    Error codes are easy to ignore (shouldn't be ignored), but checks are always required
+    
+    from math import log
+    
+    def string_log(s):
+        v = convert(s)                                      # Call convert()
+        return log(v)                                       # Compute natual log        
+    
+    from exceptional import string_log
+    string_log("ouch!".split())                             # throws value error - since we forgot about a value error, we should just throw a general exception to catch other issues
+    
+    # So we aren't getting into unpythonic error codes, we can just re-raise the exception with our exception statement
+    
+    # ensure you have imported all proper modules (sys and from math import log)
+    
+    def convert(s):
+    """Convert a string to an integer."""
+    try:                                                
+        number = ''                                    
+        for token in s:
+            number += DIGIT_MAP[token]
+        return int(number)
+    except (KeyError, TypeError) as e:                                               
+        print(f"Coversion error: {e!r}",
+              file=sys.stderr)
+        raise                                                 # Once we get the stderr file, we can raise the exception again. see the following examples
+        
+        
+    # Examples
+    from exceptional import string_log
+    string_log("two five".split())
+    
+    string_log("cat dog".split())                               # this will raise a key error but will print the conversion error message along the way
+    
+    string_log(8675309)                                         # this will raise a type error
+    
+    
+Exceptions are Part of the API
+
+    
+
+Exceptions and Protocols
+
+Avoid Explicit Type checks
+
+It's easier to ask forgiveness than for permission
+
+Cleanup actions
+
+Platform-Specific Code
