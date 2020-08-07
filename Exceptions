@@ -179,14 +179,227 @@ Re-raising Exceptions
     
 Exceptions are Part of the API
 
+    and                     # tests if both are true
+    or                      # tests if either are true
     
+    def sqrt(x):
+        """ Compute square roots using the meoth of heron of Alexandria
+
+        Args:
+            x: The number for which the square root is to be computed.
+
+        Returns:
+            The square root of x.
+        """
+
+        guess = x
+        i = 0
+        while guess * guess != x and i < 20:
+            guess = (guess + x / guess) / 2.0
+            i += 1
+        return guess
+
+    def main():
+            print(sqrt(9))
+            print(sqrt(2))
+
+    if __name__ == '__main__':
+        main()
+
+---
+
+    # Now lets add another item to main and run again, we will get a new exception (ZeroDivision Error)
+
+    def main():
+            print(sqrt(9))
+            print(sqrt(2))
+            print(sqrt(-1))
+
+
+    # There's 2 different way to deal with this - both require us to raise a Value error
+    
+Option 1 - add this under def sqrt try/except statment
+    
+    except ZeroDivisionError:
+        raise ValueError()
+        
+Option 2 - since we already know it will fail with negative numbers we can do early detection 
+    
+    def sqrt(x):
+        """ Compute square roots using the meoth of heron of Alexandria
+
+        Args:
+            x: The number for which the square root is to be computed.
+
+        Returns:
+            The square root of x.
+        
+        Raises:                                                     # Add to the documentation here 
+            ValueError: If x is negative
+        """
+        
+        if x < 0:
+            raise ValueError(                                       # this value error will raise if we try and use a negative number
+                    "Cannot compute square root of "
+                    f"negative number {x}")
+
+        guess = x
+        i = 0
+        while guess * guess != x and i < 20:
+            guess = (guess + x / guess) / 2.0
+            i += 1
+        return guess
+
+        def main():
+            try:
+                print(sqrt(9))
+                print(sqrt(2))
+                print(sqrt(-1))
+            except ValueError as e:                                     # catch the valueError
+                print(e, file=sys.stderr)                               # here the program will output the error gracefully 
+
+            print("Program execution continues "
+                    "normally here.")
 
 Exceptions and Protocols
 
+    Sequences should raise IndexError for out-of-bounds indexing
+    Exceptions must be implemented and documented correctly
+    Existing build-in exceptions are often the right ones to use
+    
+   Follow existing patterns - The more your code follows established patterns, the easier it will be for others to use 
+   
+   # Example, key value database
+   
+   def lookup(key):
+        if not find_key(key):
+            raise KeyError()                        # We would use this  because this is how a dictionary (dict) works
+        return value(key)
+   
+    Common exception types
+   
+    IndexError - An integer index is out of range
+        z = [1, 4, 2]
+        z[4]                        # this throws an IndexError
+   
+    ValueError - An object is of the correct type but has an inappropriate value
+        int("jim")                  # this throws a ValueError
+        
+    KeyError - A lookup in a mapping failed
+        codes = dict(gb=44, us=1, no=47, fr=33, es=34)
+        codes['de']                 # throws a keyError
+    
+
 Avoid Explicit Type checks
+
+    Avoid Catching TypeErrors, if your code works with tuples, sets, or something else when that wasn't intended, that may not always be a bad thing
 
 It's easier to ask forgiveness than for permission
 
+    Prepare for failure - either Check all preconditions or Prepare for the consequences of not checking
+        
+        LBYL - Look before you leap
+        EAFP - Easier to ask forgiveness than permission 
+    
+    
+        # Examples 
+        
+        LBYL:
+        
+        import os
+        
+        p = '/path/to/datafile.dat'
+        
+        if os.path.exists(p):                       # Check that the file exists - if not print a helpful message
+            process_file(p)                         # file could be deleted after check - thus a race condition exists
+        else:
+            print(f'No such file as {p}')
+
+
+        EAFP - 'the more pythonic approach'
+        
+        p = '/path/to/datafile.dat'
+        
+        try:
+            process_file(f)
+        except OSError as e:                        # Handle OSError - covers file not found and dirs instead of files among other errors
+            print(f'Error: {e}')
+
+            EAFP is enabled by exceptions, without exceptions, error handling is interspersed in program flow - very messy
+                Exceptions are not easily ignored
+                Error codes are silent by default
+                Exceptions plus EAFT makes it very hard for problems to be ignored 
+            
+            
 Cleanup actions
 
+    try:
+        # try code
+    finally:
+        # executed no matter how the try block terminates
+        
+    # Example of how this can be implemented
+    
+    import os, sys
+    
+    def make_at(path, dir_name):
+        original_path = os.getcwd()
+        os.chdir(path)
+        try:
+            os.mkdir(dir_name)
+        finally:
+            os.chdir(original_path)
+            
+            
+    Handle Exception and Cleanup
+    
+    import os, sys
+    
+    def make_at(path, dir_name):
+        original_path = os.getcwd()
+        os.chdir(path)
+        try:
+            os.mkdir(dir_name)
+        except OSError as e:
+            print(e, file=sys.stderr)
+            raise
+        finally:
+            os.chdir(original_path)
+            
+    Errors should never pass silently, unless explicityly silenced
+
 Platform-Specific Code
+
+    Platform-specific Modules
+    
+        Microsoft - use the msvcrt module
+        Linux and Mac - use tty, termios, and sys modules
+        
+        
+    # Example - try to get any input key from windows, then other os's
+    """keypress - A module for detecting a single keypress"""
+    
+    try: 
+        import msvcrt
+        
+        def getkey():
+            """Wait for a keypress and return a single character string."""
+            return msvcrt.getch()
+            
+    except ImportError:
+        
+        import sys, tty, termios
+        
+        def getkey():
+            """Wait for a keypress and return a single character string."""
+            fd = sys.stdin.fileno()
+            original_attributes = termios.tcgetattr(fd)
+            try:
+                tty.setraw(sys.stdin.fileno())
+                ch = sys.stdin.read(1)
+            finally:
+                termios.tcsetattr(fd, termios.TCPADRAIN, original_attributes)
+            return ch
+    
+
+
