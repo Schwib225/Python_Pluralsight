@@ -1,0 +1,37 @@
+List and Set Comprehensions
+
+  Comprehensions
+    
+    Concise syntax for describing lists, sets, and dictionaries
+    Readable and expressive
+    Close to natural language
+    
+  words = "Why sometimes I have believed as many as six impossible things before breakfast".split()
+  [len(word) for word in words]
+  
+  List Comprehensions Syntax
+  
+    [expression(item) for item in iterable]
+    
+    Equivalent Syntax
+    
+    lengths = []
+    for word in words:
+      lengths.append(len(word))
+    lengths
+  
+  from math import factorial
+  f = [len(str(factorial(x))) for x in range(20)]
+  f
+  type(f)                                                       # this is just a list
+  
+  Set Comphrehensions
+  
+    from math import factorial
+    s = {len(str(factorial(x))) for x in range (20)}
+    type(s)                                                     # this is a set, since it is unique it will remove all duplicates for us
+    
+Dict Comprehensions
+
+
+  
