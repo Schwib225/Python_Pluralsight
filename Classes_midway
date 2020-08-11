@@ -1,0 +1,245 @@
+A Second Class
+
+    class Aircraft:
+        
+        def __init__(self, registration, model, num_rows, num_seats_per_row):
+            self._resistration = registration
+            self._model = model
+            self._num_rows = num_rows
+            self._num_seats_per_row = num_seats_per_row
+            
+        def registration(self):
+            return self._registration
+        
+        def model(self):
+            return self._model
+            
+        def seating_plan(self):
+            return (range(1, self._num_rows + 1),
+                    "ABCDEFGHJK"[:self._num_seats_per_row])
+                    
+                    
+        # now test using the REPL
+
+        from airtravel import *
+        
+        a = Aircraft("G-EUPT", "Airbus A319", num_rows=22, num_seats_per_row=6)
+        
+        a.registration()
+        a.model()
+        a.seating_plan()
+
+Collaborating Classes
+
+    The law of demeter 
+        The principle of least knowledge
+        Only talk to your friends
+    
+    # Now lets modify the init portion like so
+    
+    def __init__(self, number, aircraft):
+        if not number[:2].isalpha():
+            raise ValueError(f"No airline code in '{number}'")
+        
+        if not number[:2].isupper():
+            raise ValueError(f"Invalid route number'{number}'")
+        
+        if not (number[2:].isdigit() and int(number[2:]) <= 9999):
+            raise ValueError(f"Invalid route number '{number}'")
+            
+        self._number = number
+        self._aircraft = aircraft
+        
+    def aircraft_model(self):
+        return self._aircraft.model()
+        
+    # In the REPL
+    from airtravel import*
+    f = FLight("BA758", Aircraft("G-EUPT", "Airbus A319", num_rows=22, num_seats_per_row=6))
+    f.aircraft.model()
+    
+Booking Seats
+
+    # To track seat assignments we will need to keep a list of dictionaries - add this to the __init__ section
+    
+    rows, seats = self._aircraft.seating_plan()
+    self._seating = [None] + [{letter: None for letter in seats} for _ in rows]
+    
+    # Test from the REPL
+
+    from airtravel import *
+    f = Flight("BA758", Aircraft("G-EUPT", "Airbus A319", num_rows=22, num_seats_per_row=6))
+    f._seating
+    
+    from pprint import pprintt as pp
+    pp(f._seating)
+    
+    # Now lets write code to allocate seats
+    
+    def allocate_seat(seat, passenger):
+        """Allocate a seat to a passenger.
+        
+        Args:
+            seat: A seat designator such as '12C' or '21F'
+            passenger: The passenger name.
+        
+        Raises:
+            ValueError: If the seat is unavailable.
+        """
+        rows, seat_letters = self._aircraft.seating_plan()
+        
+        letter = seat[-1]
+        if letter not in seat_letters:
+            raise ValueError(f"Invalid seat letter {letter}")
+        
+        row_text = seat[:-1]
+        try:
+            row = int(row_text)
+        except ValueError:
+            raise ValueError(f"Invalid seat row {row_text}")
+            
+        if row not in rows:
+            raise ValueError(f"Invalid seat row {row_text}")
+        
+        if self._seating[row][letter] is not None:
+            raise ValueError(f"Seat {seat} already occuplied")
+            
+        self._seating[row][letter] = passenger
+    
+    # Back in the REPL lets try it out
+    
+    from airtravel import *
+    f = Flight("BA758", Aircraft("G-EUPT", "Airbus A319", num_rows=22, num_seats_per_row=6))   
+    f.allocate_seat("12A", "Guido van Rossume")                 # this will throw a type error because we have forgotten to allocate the (self) within the allocate_seat method
+    
+    # The code should look like this
+    
+    def allocate_seat(self, seat, passenger):                   # add in 'self' 
+    
+    from airtravel import *
+    f = Flight("BA758", Aircraft("G-EUPT", "Airbus A319", num_rows=22, num_seats_per_row=6))   
+    f.allocate_seat("12A", "Guido van Rossume")                 # this will succeed now
+    f.allocate_seat("12A", "Rasmus Lerdorf")                    # this will throw a valueError because it is already occupied
+    
+    f.allocate_seat("15F", "Bjarne Stoustrup")
+    f.allocate_seat("15E", "Anders Hejlsberg")
+    f.allocate_seat("E27", "Yukihiro Matsumoto")                # this will fail since it is in a seat that doesn't exist
+    f.allocate_seat("1C", "John McCarthy")
+    f.allocate_seat("1D", "Richard Hickey")
+    f.allocate_seat("DD", "Larry Wall")                         # This will fail due to invalid seat
+    
+    pp(f._seating)                                              # View the updated seating chart
+    
+Methods for Implementation Details    
+
+    # We will need to refactor some code so we can use it throughout more methods. Move the following from the allocate_seat section to its own method
+    
+    def allocate_seat(self, seat, passenger):
+    
+        row, letter = self._parse_seat(seat)
+        
+    
+    def _parse_seat(self, seat):
+    
+        rows, seat_letters = self._aircraft.seating_plan()
+        
+        letter = seat[-1]
+        if letter not in seat_letters:
+            raise ValueError(f"Invalid seat letter {letter}")
+        
+        row_text = seat[:-1]
+        try:
+            row = int(row_text)
+        except ValueError:
+            raise ValueError(f"Invalid seat row {row_text}")
+            
+        if row not in rows:
+            raise ValueError(f"Invalid seat row {row_text}")
+            
+        return row, letter
+     
+     def relocate_passenger(self, from_seat, to_seat):
+        """Relocate a passenger to a different seat.
+        
+        Args:
+            from_seat: The existing seat designator for the passenger to be moved.
+            
+            to_seat: THe new seat designator.
+            
+        """
+        from_row, from_letter = self._parse_seat(from_seat)
+        if self._seating[from_row][from_letter] is None:
+            raise ValueError(f"No passenger to relocate in seat{from_seat}")
+        
+        to_row, to_letter = self._parse_seat(to_seat)
+        if self._seating[to_row][to_letter] is not None:
+            raise ValueError(f"Seat {to_seat} already occupied")
+        
+        self._seating[to_row][to_Letter] = self._seating[from_row][from_Letter]
+        self._seating[from_row][from_letter] = None
+        
+        
+    # Outside both Classes, create a function to make the flight so we don't have to keep doing it
+    
+    def make_flight():
+        f = Flight("BA758", AIrcraft("G-EUPT", "Airbus A319", num_rows=22, num_Seats_per_row=6))
+        f.allocate_seat("12A", "Guido van Rossum")
+        f.allocate_seat("15F", "Bjarne Stroustrup")
+        f.allocate_seat("15E", "Anders Hejlsberg")
+        f.allocate_seat("1C", "John McCarthy")
+        f.allocate_seat("1D", "Rich Hickey")
+        return f
+      
+    # now in the repl
+    
+    from airtravel import make_flight
+    f = make_flight()
+    f
+    f.relocate_passenger("12A", "15D")
+    from pprint import pprint as pp
+    pp(f._seating)                              # should now show Guido in 15D and printed out nicely
+    
+    # Next, lets make a method to figure out how many seats are remaining
+    
+    def num_available_seats(self):
+        return sum(sum(1 for s in row.values() if s is None)                    # this assigns a value of 1 to each None is the list
+                   for row in self._seating
+                   if row is not None)
+    
+    # Now lets try it out
+    
+    from airtravel import make_flight
+    f = make_flight()
+    f.num_available_seats()                                                     # Should be 127 since we only filled 5 seats
+    
+    
+    
+Object-Oriented Design with Function Objects
+
+    # New requirement for our program 
+    Print boarding cards in alphabetical order
+        Separation of Concerns: don't put this on the FLight Class
+        Remember that functions are objects too!
+        
+    # Create a function at the module level (just like the make_flight function)
+    
+    def console_card_printer(passenger, seat, flight_number, aircraft):
+        output = f"| Name: {passenger}"         \ 
+                 f"  Flight: {flight_number}"   \
+                 f"  Seat: {seat}"              \
+                 f"  Aircraft: {aircraft}"      \
+                 " |"
+         banner = "+" + "-" * (len(output) - 2) + "+"
+         border = "|" + " " * (len(output) - 2) + "|"
+         lines = [banner, border, output, border, banner]
+         card = "\n".join(lines)
+         print(card)
+         print()
+         
+         
+        
+    
+    
+    
+    
+    
