@@ -1,0 +1,34 @@
+Opening Files
+
+  open()
+    # Takes many arguements but the most common are:
+        File: the path to the file (required)
+        Mode: Read, write, or append plus binary or text
+        encoding: encoding to use in text mode
+        
+    Files are stored as binary
+    Binary mode reflects the raw data in the file
+    Text Mode encodes and decodes the binary contents with the default (or another if you specify) encoding 
+        by default, universal newlines are used
+        the default encoding is utf-8
+        
+    write()         # this is encode
+    read()          # this is decode
+    
+    import sys
+    sys.getdefaultencoding()                    # this isn't always the same on different systems, make sure you're confirming the encoding is what you think it is
+    
+    # Documentation for encoding support: docs.python.org/3/library/codecs.html#standard-encodings
+
+Writing Text
+
+Reading Text
+
+Appending Text
+
+Iterating over Files
+
+Closing Files with Finally
+
+With-blocks
+
