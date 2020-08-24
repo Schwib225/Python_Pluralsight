@@ -339,5 +339,56 @@ Polymorphism and duck typing
 
 Inheritence and Implementation Sharing
     
+    Late Binding
+    
+    1. Nominally-typed languages use inheritance for polymorphism
+    2. Python uses late binding
+    3. You can try any method on any object
+    
+    # Mod aircraft classes to return total number of seats
+    
+    # Add the following
+    
+        def num_seats(self):
+            rows, row_seats = self.seating_plan()
+            return len(rows) * len(row_seats)
+    
 
+    # Add aircraft class - this  will allow us to deduplicate code further 
+    
+    class Aircraft:
+        
+        def num_seats(self):
+            rows, row_seats = self.seating_plan()
+            return len(rows) * len(row_seats)
+    
+    # In the repl
+    
+    from airtravel import *
+    base = Aircraft()
+    base.num_seats()                        # note that currently this won't work because we haven't tied the Aircraft class to each of the airplane classes, see the following
+    
+    class AirbusA319(Aircraft):             # like so
+        
+    class Boeing777(Aircraft):
 
+    from airtravel import *
+    a = AirbusA319("G-EZBT")
+    a.num_seats()
+    
+    b = Boeing777("N717AN")
+    b.num_seats()
+    
+    # To take it a step further, move the registration and init methods into the Aircraft class to further deduplicate code
+    
+    class Aircraft:
+        
+        def __init__(self, registration):
+            self._registration = registration
+            
+        def registration(self):
+            return self._registration
+        
+        def num_seats(self):
+            rows, row_seats = self.seataing_plan()
+            return len(rows) * len(row_seats)
