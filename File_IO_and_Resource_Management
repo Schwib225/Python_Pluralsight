@@ -22,6 +22,29 @@ Opening Files
 
 Writing Text
 
+  python 
+  f = open('wasteland.txt', mode='wt', encoding='utf-8')        # w is for write and t is for text 
+  
+      # Note that there are 3 modes, read (r), write (w), and append(a)
+      # for each of these there are selectors, binary(b) or text(t)
+      
+  open() returns a file like object
+  help() works on modules, methods and types
+  and it works on instances too! - remember, everything is an object!
+  
+  help(f)                                                       # note that we can write to the file
+  
+  f.write('What are the roots that clutch, ')
+  f.write('what branches grow\n')
+  f.write('Out of this stony rubbish? ')
+  f.close()                                                     # At this point the file is closed and the contents are available to the rest of the system, you can verify by accessing this new file you created, its in the working dir
+  
+  
+  
+  
+      
+  
+
 Reading Text
 
 Appending Text
