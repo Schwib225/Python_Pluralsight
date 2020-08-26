@@ -39,19 +39,142 @@ Writing Text
   f.write('Out of this stony rubbish? ')
   f.close()                                                     # At this point the file is closed and the contents are available to the rest of the system, you can verify by accessing this new file you created, its in the working dir
   
-  
-  
-  
-      
-  
 
 Reading Text
 
+  g = open('wasteland.txt', mode='rt', encoding='utf-8')
+  g.read(32)                                                    # reads the number of characters, not bytes
+  g.read()                                                      # reads the entire file contents
+  g.read()                                                      # since it has been fully read it returns nothing
+  g.seek(0)                                                     # now the read can start over
+  
+  # there are easier ways to read files than using read
+  g.readline()                                                  # read the first line
+  g.readline()                                                  # read the second line
+  g.readline()                                                  # this returns an empty string
+  g.seek(0)                                                     # return to the beginnning of the line
+  g.readlines()                                                 # reads all lines in a file, ensure you have enough memory for this
+  g.close()                                                     # close the file once done with it
+  
 Appending Text
+
+  h = open('wasteland.txt', mode='at', encoding='utf-8')      # 'a' for append
+  
+  h.writelines(                                               # there is no 'write' supported but there is 'writelines'
+      ['Son of man, \n',
+        'You cannot say, or guess, ',
+        'for you know only, \n',
+        'A heap of broken images, ',
+        'where the sun beats \n'])
+  h.close()
 
 Iterating over Files
 
+    # create files.py in editor
+    
+    import sys
+    
+    f = open(sys.argv[1], mode='rt', encoding='utf-8')
+    for line in f:
+        print(line)
+    f.close()
+    
+    # In repl
+    
+    python files.py wasteland.txt
+    
+    # note the extra line added because of the print function, to get rid of this, modify the code to use sys.stdout.write(line)
+    
+    f = open(sys.argv[1], mode='rt', encoding='utf-8')
+    for line in f:
+        sys.stdout.write(line)
+    f.close()
+
+    # Again, test in the repl
+    
+    python files.py wasteland.txt
+
 Closing Files with Finally
+
+    The Recaman Sequence - this is only to generate data for this example
+    
+        import sys
+        from itertools import count, islice
+        
+        def sequence():
+            """Generate Recaman's sequence."""
+            seen = set()
+            a = 0
+            for n in count(1):
+            yield a
+            seen.add(a)
+            c = a - n
+            if c < 0 or c in seen:
+                c = a + n
+            a = c
+            
+        def write_sequence(filename, num):
+            """Write Recaman's sequence to a text file."""
+            f = open(filename, mode='wt', encoding='utf-8')
+            f.writelines(f"{r}\n"
+                         for r in islice(sequence(), num = 1))
+             f.close()
+         
+    # In the REPL
+    
+    python recaman.py recaman.dat 1000                      # calls the script to write 1000 lines to recaman.dat
+
+    # Now lets create a script to import everything back into the repl once it has been generated
+    
+    Sequence Reader
+    
+    """Read and print an integer series."""
+    import sys
+    
+    def read_series(filename):
+        f = open(filename, mode='rt', encoding='utf-8')
+        series = []
+        for line in f:
+            a = int(line.strip())
+            series.append(a)
+        f.close()
+        return series
+        
+    # In repl
+    
+    python series.py recaman.dat
+    
+    # Now lets break it by adding a string to the table
+        
+    echo "oops" >> recaman.dat
+    python series.py recaman.dat                    # now this will raise a value error stacktrace - the close call was never executed either since it didn't complete
+    
+    # The fix
+    
+    def read_series(filename):
+        try:
+            f = open(filename, mode='rt', encoding='utf-8')
+            series = []
+            for line in f:
+                a = int(line.strip())
+                series.append(a)
+        finally:
+            f.close()
+        return series
+        
+    def main(filename):
+        series = read_series(filename)
+        print(series)
+        
+    # Replace the for loop with a line strip
+    
+    def read_series(filename):
+        try:
+            f = open(filename, mode='rt', encoding='utf-8')
+            return [int(line.strip()) for line in f]                    # like so
+        finally:                                                        # no matter what, the finally block will be called and will properly close the loop
+            f.close()
+
 
 With-blocks
 
